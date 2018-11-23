@@ -1,35 +1,35 @@
 import React, { Component } from 'react';
+import ScheduleCalendar from './ScheduleCalendar';
 import './App.css';
+
 let moment = require('moment');
 
 class App extends Component {
-  buildDays(year, month) {
-    const firstOf = moment([year, month, 1]);
-    const days = [];
-    let current = moment(firstOf);
-    // TODO: refactor to generators
-    while (current.isSame(firstOf, 'month')) {
-      days.push(moment(current));
-      current.add(1, 'day');
-    }
-
-    return days;
+  constructor(props) {
+    super(props);
+    this.state = { currentDate: moment() }
   }
 
-  renderDays() {
-    const now = moment();
-    return this.buildDays(now.year(), now.month()).map((d,i) =>
-      <div key={i}>{d.format('DD-MMM-Y')}</div>
-    )
+  switchMonth(diff) {
+    const newDate = moment(this.state.currentDate);
+    newDate.add(diff, 'month');
+    this.setState({currentDate: newDate});
   }
 
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          {this.renderDays()}
+        <header className="App-header" />
 
-        </header>
+        <div className="Calendar-navi">
+          <button onClick={() => this.switchMonth(-1)}>prev</button>
+        </div>
+
+        <ScheduleCalendar year={this.state.currentDate.year()} month={this.state.currentDate.month()}/>
+
+        <div className="Calendar-navi">
+          <button onClick={() => this.switchMonth(1)}>next</button>
+        </div>
       </div>
     );
   }
