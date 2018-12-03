@@ -1,6 +1,8 @@
 import {Component} from "react";
 import React from "react";
+
 import './ScheduleCalendar.css';
+import ScheduleDay from './ScheduleDay';
 
 
 let moment = require('moment');
@@ -26,14 +28,18 @@ class ScheduleCalendar extends Component {
   renderDays() {
     const currentMonth = moment([this.props.year, this.props.month, 1]);
     return this.buildDays(currentMonth.year(), currentMonth.month()).map((d,i) =>
-      <div key={i}>{d.format('DD-MMM-Y')}</div>
+      <div key={i}>
+        <ScheduleDay day={d} people={this.props.people} rota={this.props.rota} w={this.props.rota[d.format()]} rotaChanged={this.props.rotaChanged}/>
+      </div>
     )
   }
 
   render() {
     return (
       <div className="ScheduleCalendar">
+        <form>
         {this.renderDays()}
+        </form>
       </div>
     )
   }
